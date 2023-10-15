@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link"
 import NavBar from "@/components/NavBar";
 import { RedirectType } from "next/dist/client/components/redirect";
+import OrdersDrawer from "@/components/OrdersDrawer";
 
 function getOrders() {
     return prisma.order.findMany({
@@ -36,20 +37,7 @@ export default async function Home() {
   return (
     <div className="w-full grid mt-36 place-items-center p-8">
         <NavBar />
-        <h1 className="font-semibold text-3xl mb-8">ORDERS:</h1>
-        {orders.map(order => (
-            <Link href={'/' + order.id} className="w-1/2 border border-gray-400 rounded flex px-12 py-6 justify-between bg-gray-300/75 hover:bg-gray-300 mb-2">
-                <div className="font-semibold">{order.customer}</div>
-                <div>{order.date}</div>
-            </Link>
-        ))}
-        <div className="w-1/2 grid justify-center">
-            <form className="w-full">
-                <button formAction={handleAddOrder} className="w-full rounded grid place-items-center px-12 py-6 bg-blue-300/75 hover:bg-blue-300 font-semibold">
-                    New order
-                </button>
-            </form>
-        </div>
+        <OrdersDrawer />
     </div>
   )
 }

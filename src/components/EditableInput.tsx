@@ -1,51 +1,31 @@
 "use client"
 import { OrderItem } from "@/types/order"
 
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 type EditableInputProps = {
     orderItem: OrderItem
+    handleDeleteItem: (orderItemId: string) => void
+    handleUpdateItem: (orderItemId: string, orderItem: OrderItem) => void
 }
 
 
-export default function EditableInput({orderItem}: EditableInputProps) {
+export default function EditableInput({orderItem, handleUpdateItem, handleDeleteItem}: EditableInputProps) {
 
     const [newOrderItem, setNewOrderItem] = useState<OrderItem>(orderItem);
     const [isEdit, setIsEdit] = useState<boolean>(orderItem.totalItemPrice === 0 ? true : false);
 
-    const handleUpdate = async () => {
+    const handleUpdate = () => {
         setIsEdit(false)
         const newPrice: number = parseFloat((newOrderItem.qty * newOrderItem.price).toFixed(2))
-        setNewOrderItem({...newOrderItem, totalItemPrice: newPrice})
+        const modifiedOrderItem = {...newOrderItem, totalItemPrice: newPrice}
+        setNewOrderItem(modifiedOrderItem)
 
-        await fetch('/api/updateOrderItem', {
-            method: 'POST', 
-            cache: 'no-store',
-            headers: {
-                'Content-Type': 'application/json'
-            }, 
-            body: JSON.stringify({
-                ...newOrderItem,
-                totalItemPrice: newPrice
-            })
-        })
-
+        handleUpdateItem(newOrderItem.id, modifiedOrderItem)
     }
 
     const handleEditClick = () => {
         setIsEdit(true);
-    }
-
-    const handleDelete = async () => {
-        await fetch('/api/deleteOrderItem', {
-            method: 'POST', 
-            cache: 'no-store',
-            headers: {
-                'Content-Type': 'application/json'
-            }, 
-            body: JSON.stringify(newOrderItem)
-        })
-        window.location.reload()
     }
 
     return isEdit === true ?
@@ -77,11 +57,11 @@ export default function EditableInput({orderItem}: EditableInputProps) {
                 </td>
                 <td className="p-2 whitespace-nowrap">{newOrderItem.totalItemPrice}</td>
                 <td className="p-2 whitespace-nowrap">
-                    <div className="flex">
-                        <button onClick={handleUpdate} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-16 mr-2">
-                            Save
+                    <div className="flex w-full justify-between">
+                        <button onClick={handleUpdate} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-20 mr-2">
+                            Update
                         </button>
-                        <button onClick={handleDelete} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-18">
+                        <button onClick={() => handleDeleteItem(newOrderItem.id)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-18">
                             Delete
                         </button>
                     </div>
@@ -96,11 +76,11 @@ export default function EditableInput({orderItem}: EditableInputProps) {
                 <td className="p-4 whitespace-nowrap">{newOrderItem.price}</td>
                 <td className="p-4 whitespace-nowrap bg-gray-50">{newOrderItem.totalItemPrice}</td>
                 <td className="whitespace-nowrap">
-                    <div className="flex">
-                        <button onClick={handleEditClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-16 mr-2">
+                    <div className="flex w-full justify-between">
+                        <button onClick={handleEditClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-20 mr-2">
                             Edit
                         </button>
-                        <button onClick={handleDelete} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-18">
+                        <button onClick={() => handleDeleteItem(newOrderItem.id)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-18">
                             Delete
                         </button>
                     </div>

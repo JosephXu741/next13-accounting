@@ -13,9 +13,9 @@ function getOrder(orderId: number) {
     return order
 }
 
-export default async function Page({params}: {params: {orderId: string}}) {
+export default async function Page({searchParams}: {searchParams: {orderId: string}}) {
 
-    const orderId: number = parseInt(params.orderId);
+    const orderId: number = parseInt(searchParams.orderId);
 
     const order: Order | null = await getOrder(orderId);
 
