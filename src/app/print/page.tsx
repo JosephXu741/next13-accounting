@@ -50,7 +50,7 @@ export default async function Page({searchParams}: {searchParams: {orderId: stri
                 </div>
             </div>
             <div className="border-b-2 border-black w-full h-8">
-                <p>FROM Paddy's Fresh Pty Ltd</p>
+                <p>FROM Paddys Fresh Pty Ltd</p>
             </div>
             <div className="border-b-2 border-black w-full h-8"></div>
             <div className="border-b-2 border-black w-full h-8">
@@ -68,7 +68,7 @@ export default async function Page({searchParams}: {searchParams: {orderId: stri
                 </thead>
                 <tbody>
                     {order.orderItems.map(item => (
-                        <tr>
+                        <tr key={item.id}>
                             <td className="border-2 border-black">{`${item.qty} ${item.qtyType}`}</td>
                             <td className="border-2 border-black">{item.name}</td>
                             <td className="border-2 border-black">${item.price.toString()}</td>

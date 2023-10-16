@@ -58,7 +58,7 @@ export default function OrdersDrawer() {
                     <div className="mb-4 w-full flex justify-center"><span className="loading loading-ring loading-lg"></span></div> 
                     : 
                     orders.map(order => (
-                        <li className="relative"> 
+                        <li className="relative" key={order.id}> 
                             <Link href={'/orders?orderid=' + order.id} className="w-full border border-gray-400 rounded block p-2 bg-gray-300/75 hover:bg-gray-300 mb-2">
                                 <div className="font-semibold text-center mb-2 text-lg">{order.customer !== '' ? order.customer : '___________'}</div>
                                 <div className="flex justify-between">

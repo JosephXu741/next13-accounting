@@ -14,10 +14,6 @@ import NoOrderScreen from "@/components/NoOrderScreen";
 
 export default function Page({searchParams}: {searchParams: {orderid: string}}) {
 
-    if (searchParams.orderid === undefined) {
-        return <NoOrderScreen title="No Order Selected" />
-    }
-
     const router = useRouter()
     const [isPending, startTransition] = useTransition();
 
@@ -94,6 +90,10 @@ export default function Page({searchParams}: {searchParams: {orderid: string}}) 
             setDeleteList([])
             router.push('print?orderId=' + searchParams.orderid)
         })
+    }
+
+    if (searchParams.orderid === undefined) {
+        return <NoOrderScreen title="No Order Selected" />
     }
 
     if (noOrder) {
