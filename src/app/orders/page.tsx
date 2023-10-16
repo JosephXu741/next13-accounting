@@ -26,16 +26,18 @@ export default function Page({searchParams}: {searchParams: {orderid: string}}) 
 
     useEffect(() => {
         startTransition(async () => {
-            const order = await getOrder(parseInt(searchParams.orderid))
+            if (searchParams.orderid !== undefined) {
+                const order = await getOrder(parseInt(searchParams.orderid))
 
-            if (order && order !== undefined) {
-                setCustomer(order.customer as string)
-                setDate(order?.date as string)
-                setTotalPrice(order?.totalPrice as number)
-                setOrderItems(order ? order.orderItems : [])
-                setNoOrder(false);
-            } else {
-                setNoOrder(true)
+                if (order && order !== undefined) {
+                    setCustomer(order.customer as string)
+                    setDate(order?.date as string)
+                    setTotalPrice(order?.totalPrice as number)
+                    setOrderItems(order ? order.orderItems : [])
+                    setNoOrder(false);
+                } else {
+                    setNoOrder(true)
+                }
             }
         })
     }, [searchParams])
