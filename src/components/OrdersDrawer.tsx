@@ -38,16 +38,16 @@ export default function OrdersDrawer() {
     }, [])
 
     return (
-        <div className="drawer">
+        <div className="drawer flex justify-center">
             <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-            <label htmlFor="my-drawer" className="btn btn-primary drawer-button">Open drawer</label>
+            <label htmlFor="my-drawer" className="btn btn-primary drawer-button">Open Orders</label>
             <div className="drawer-side">
                 <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
                 <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
                     <li>
                         {isAddOrderPending 
                         ? 
-                        <div>Loading</div> 
+                        <div className="mb-4 w-full flex justify-center"><span className="loading loading-ring loading-lg"></span></div> 
                         : 
                         <button onClick={handleAddOrder} className="btn btn-primary flex items-center mb-4">
                             <span>New order</span>
@@ -55,7 +55,7 @@ export default function OrdersDrawer() {
                     </li>
                     {isLoadPending 
                     ? 
-                    <div>loading</div>
+                    <div className="mb-4 w-full flex justify-center"><span className="loading loading-ring loading-lg"></span></div> 
                     : 
                     orders.map(order => (
                         <li className="relative"> 

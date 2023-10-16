@@ -8,10 +8,15 @@ import { getOrder, saveOrder } from "../actions";
 import { useRouter } from "next/navigation";
 import NavBar from "@/components/NavBar";
 import OrdersDrawer from "@/components/OrdersDrawer";
+import NoOrderScreen from "@/components/NoOrderScreen";
 
 
 
 export default function Page({searchParams}: {searchParams: {orderid: string}}) {
+
+    if (searchParams.orderid === undefined) {
+        return <NoOrderScreen title="No Order Selected" />
+    }
 
     const router = useRouter()
     const [isPending, startTransition] = useTransition();
@@ -21,6 +26,7 @@ export default function Page({searchParams}: {searchParams: {orderid: string}}) 
     const [date, setDate] = useState<string>('')
     const [totalPrice, setTotalPrice] = useState<number>(0)
     const [deleteList, setDeleteList] = useState<string[]>([])
+    const [noOrder, setNoOrder] = useState<boolean>(false);
 
     useEffect(() => {
         startTransition(async () => {
@@ -31,6 +37,9 @@ export default function Page({searchParams}: {searchParams: {orderid: string}}) 
                 setDate(order?.date as string)
                 setTotalPrice(order?.totalPrice as number)
                 setOrderItems(order ? order.orderItems : [])
+                setNoOrder(false);
+            } else {
+                setNoOrder(true)
             }
         })
     }, [searchParams])
@@ -87,15 +96,25 @@ export default function Page({searchParams}: {searchParams: {orderid: string}}) 
         })
     }
 
+    if (noOrder) {
+        return <NoOrderScreen title="Order doesn't exist" />
+    }
+
     if (isPending) {
-        return <div>loading</div>
+        return (
+            <div className="w-full h-screen grid place-items-center">
+                <span className="loading loading-spinner loading-lg"></span>
+            </div>
+        )
     }
 
     return (
-    <section className="antialiased bg-gray-100 text-gray-600 h-screen px-4 grid place-items-center">
+    <div className="antialiased text-gray-600 px-4 grid place-items-center">
         <NavBar />
-        <OrdersDrawer />
-        <div className="flex flex-col justify-center">
+        <div className="absolute left-4 top-20">
+            <OrdersDrawer />
+        </div>
+        <div className="flex flex-col justify-center mt-24">
             <div className="w-full max-w-5xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
                 <div className="p-3">
                     <div className="overflow-x-auto">
@@ -156,6 +175,6 @@ export default function Page({searchParams}: {searchParams: {orderid: string}}) 
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 )}
 
